@@ -20,6 +20,7 @@ class Asset:
 
         self._download_prices()
         self._compute_log_returns()
+        self._estimate_pointwise_volatility()
 
     def _download_prices(self):
         self.price = {}
@@ -30,6 +31,14 @@ class Asset:
         self.returns = self._compute_log_difference(self.price)
         if detrend:
             self.returns = self._detrend(self.returns, mean_window=mean_window)
+
+    def _estimate_pointwise_volatility(self):
+        """Estimate via squared returns."""
+        self.volatility = self.returns**2
+
+    def compute_realized_volatility(self, window: int = 30) -> pd.Series:
+        """Compute realized volatility over a rolling window."""
+        return self.returns.rolling(window=window).std()
 
     @staticmethod
     def _compute_log_difference(series: pd.Series) -> pd.Series:
