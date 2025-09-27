@@ -9,10 +9,12 @@ class Asset:
     def __init__(
         self,
         asset_name: str,
+        tick_name: str,
         time_period: Tuple[str, str],
         value_type: str = "Close",
     ):
         self.asset_name = asset_name
+        self.tick_name = tick_name
         self.start_date, self.end_date = time_period
         self.value_type = value_type
 
@@ -21,7 +23,7 @@ class Asset:
 
     def _download_prices(self):
         self.price = {}
-        df = yf.download(self.asset_name, start=self.start_date, end=self.end_date)
+        df = yf.download(self.tick_name, start=self.start_date, end=self.end_date)
         self.price = df[self.value_type]
 
     def _compute_log_returns(self, detrend: bool = False, mean_window: int = 30):
