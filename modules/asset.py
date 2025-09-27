@@ -36,9 +36,12 @@ class Asset:
         """Estimate via squared returns."""
         self.volatility = self.returns**2
 
-    def compute_realized_volatility(self, window: int = 30) -> pd.Series:
+    def compute_realized_volatility(self, window: int = 30, store: bool = False) -> pd.Series:
         """Compute realized volatility over a rolling window."""
-        return self.returns.rolling(window=window).std()
+        realized_vol = self.returns.rolling(window=window).std()
+        if store:
+            self.realized_volatility = realized_vol
+        return realized_vol
 
     @staticmethod
     def _compute_log_difference(series: pd.Series) -> pd.Series:
