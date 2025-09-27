@@ -6,6 +6,15 @@ import yfinance as yf
 
 
 class Asset:
+    """A model for different financial assets.
+    
+    This class implements retrieving price data from Yahoo Finance,
+    computing log returns, and estimating volatility.
+    
+    N.B. By "volatility" we mean variance. This choice is made because data
+    is often more easily modeled in terms of variance rather than standard deviation.
+    """
+
     def __init__(
         self,
         asset_name: str,
