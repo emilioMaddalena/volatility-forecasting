@@ -33,14 +33,20 @@ class Asset:
             self.returns = self._detrend(self.returns, mean_window=mean_window)
 
     def _estimate_pointwise_volatility(self):
-        """Estimate via squared returns."""
-        self.volatility = self.returns**2
+        """Estimate via squared returns.
+        
+        N.B. This is a variance estimator, not standard deviation.
+        """
+        self.pointwise_volatility = self.returns**2
 
     def compute_realized_volatility(self, window: int = 30, store: bool = False) -> pd.Series:
-        """Compute realized volatility over a rolling window."""
-        realized_vol = self.returns.rolling(window=window).std()
+        """Compute realized volatility over a rolling window.
+        
+        N.B. This is a variance estimator, not standard deviation.
+        """
+        realized_vol = self.returns.rolling(window=window).var()
         if store:
-            self.realized_volatility = realized_vol
+            self.__setattr__(f"realized_volatility_w{window}", realized_vol)
         return realized_vol
 
     @staticmethod
