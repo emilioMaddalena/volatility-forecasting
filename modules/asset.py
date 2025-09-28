@@ -34,7 +34,7 @@ class Asset:
     def _download_prices(self):
         self.price = {}
         df = yf.download(self.tick_name, start=self.start_date, end=self.end_date)
-        self.price = df[self.value_type]
+        self.price = df[self.value_type][self.tick_name]
 
     def _compute_log_returns(self, detrend: bool = False, mean_window: int = 30):
         self.returns = self._compute_log_difference(self.price)
