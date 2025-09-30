@@ -32,11 +32,13 @@ class Asset:
         self._estimate_pointwise_volatility()
 
     def _download_prices(self):
+        """Get tickers data for the asset."""
         self.price = {}
         df = yf.download(self.tick_name, start=self.start_date, end=self.end_date)
         self.price = df[self.value_type][self.tick_name]
 
     def _compute_log_returns(self, detrend: bool = False, mean_window: int = 30):
+        """Compute log returns, optionally detrended."""
         self.returns = self._compute_log_difference(self.price)
         if detrend:
             self.returns = self._detrend(self.returns, mean_window=mean_window)
